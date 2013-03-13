@@ -208,9 +208,9 @@
     
     NSUInteger prodRecordID = 1;
     NSUInteger contentRecordID = 1;
+    NSUInteger fileRecordID = 1;
     
     NSMutableString *prodSqlQuery = [[NSMutableString alloc] initWithString:@""];
-    
     NSMutableString *contentSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
     HUD.labelText = @"Initiating";
@@ -255,12 +255,13 @@
             
             NSString *xmlFilePath = [xmlListArr objectAtIndex:i];
             
-
- 
             
             DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
             
             DDXMLElement *rootElement= [xmlDoc rootElement];
+            
+            
+             /*********  Parsing Product BEGIN ************/
             
             NSString *prodName = [[[rootElement elementForName:@"DisplayName"] stringValue] trimLRSpaces];
             NSString *brandTxt = [[[rootElement elementForName:@"Brand"] stringValue] trimLRSpaces];
@@ -268,50 +269,67 @@
             
             NSString *SPXUrl = [NSString stringWithFormat:@"/en/%@/%@/",brandTxt,prodTitle];
             
-            
-            NSArray * descTabsArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle" error:nil];
-            
-            NSArray * contentArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle/Content" error:nil];
-            
-            if ([contentArr count] > 0) {
-                
-                for (DDXMLElement *aElement in contentArr) {
-                    NSString *tabTitle = @"Description";
-                    NSString *content = [[aElement stringValue] sqlQueryString];
-                    
-                    NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d,%d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
-                    
-                    [contentSqlQuery appendString:insertSQL];
-                    
-                    contentRecordID++;
-                    
-                    
-                }
-            }
-            else
-            {
-                
-                for (DDXMLElement *aElement in descTabsArr) {
-                    NSString *tabTitle = [aElement stringValue];
-                    NSString *content = [[[(DDXMLElement *)[aElement parent] elementForName:@"Content"] stringValue] sqlQueryString];
-                    
-                    NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d, %d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
-                    
-                    [contentSqlQuery appendString:insertSQL];
-                    
-                    contentRecordID++;
-                    
-
-                }
-                
-            }
-
-            
             NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Brand_ID, Name, Label, IsFeatured, ProductType, SPXUrl, RelatedProduct1, RelatedProduct2, RelatedProduct3, RelatedProduct4, RelatedProduct5, RelatedProduct6, RelatedProduct7, RelatedProduct8, RelatedProduct9, RelatedProduct10) values (%d, %d, '%@', '', 'No', 'Filters', '%@', null, null, null, null, null, null, null, null, null, null);",kProductTable,prodRecordID,brandID,prodName,SPXUrl];
             
             [prodSqlQuery appendString:insertSQL];
             
             prodRecordID++;
+            
+            
+            /*********  Parsing Product END ************/
+            
+            
+            
+            
+            /*********  Parsing ContentTab BEGIN ************/
+            
+            NSArray * descTabsArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle" error:nil];
+            
+            NSArray * contentArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle/Content" error:nil];
+            
+          
+                
+            for (DDXMLElement *aElement in contentArr) {
+                NSString *tabTitle = @"Description";
+                NSString *content = [[aElement stringValue] sqlQueryString];
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d,%d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
+                
+                [contentSqlQuery appendString:insertSQL];
+                
+                contentRecordID++;
+                
+                
+            }
+            
+
+                
+            for (DDXMLElement *aElement in descTabsArr) {
+                
+
+                
+                NSLog(@"%@",[aElement elementForName:@"Content"]);
+                
+                NSString *tabTitle = [aElement stringValue];
+                NSString *content = [[[(DDXMLElement *)[aElement parent] elementForName:@"Content"] stringValue] sqlQueryString];
+                
+                if (tabTitle != nil && content != nil) {
+                    NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d, %d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
+                    
+                    [contentSqlQuery appendString:insertSQL];
+                    
+                    contentRecordID++;
+                }
+                
+
+            }
+            
+            /*********  Parsing ContentTab END ************/
+            
+            
+
+            
+
             
 
             
