@@ -32,4 +32,10 @@
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
+- (NSString *)sqlQueryString
+{
+    self = [self stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    return self;
+}
+
 @end

@@ -114,26 +114,7 @@
     [self clearDatabase];
     
 
-//    [SVProgressHUD showProgress:_loadingProgress status:_loadingText];
-//    
-//    [self performSelector:@selector(increaseProgress) withObject:nil afterDelay:0.1];
-//    
-//    _bIsParsingFinished = NO;
-//    
-//    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [self initDataBase]; // 1
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [SVProgressHUD dismiss];
-//            [NSObject cancelPreviousPerformRequestsWithTarget:self
-//                                                     selector:@selector(increaseProgress)
-//                                                       object:nil];
-//            
-//            _bIsParsingFinished = YES;
-//            NSLog(@"The task Finished");
-//        });
-//    });
-    
+
 
 	HUD = [[MBProgressHUD alloc] initWithView:self.view];
 	[self.view addSubview:HUD];
@@ -160,8 +141,7 @@
     }];
 	
 	
-	// myProgressTask uses the HUD instance to update progress
-	//[HUD showWhileExecuting:@selector(initDataBase) onTarget:self withObject:nil animated:YES];
+
 }
 
 
@@ -226,10 +206,12 @@
     NSArray  *folderArr = [[NSFileManager defaultManager]  contentsOfDirectoryAtPath:kProductXMLPath error:&error];
     
     
-    NSUInteger recordID = 1;
+    NSUInteger prodRecordID = 1;
+    NSUInteger contentRecordID = 1;
     
-    NSMutableString *sqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *prodSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
+    NSMutableString *contentSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
     HUD.labelText = @"Initiating";
     
@@ -287,13 +269,49 @@
             NSString *SPXUrl = [NSString stringWithFormat:@"/en/%@/%@/",brandTxt,prodTitle];
             
             
+            NSArray * descTabsArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle" error:nil];
+            
+            NSArray * contentArr = [xmlDoc nodesForXPath:@"/ProductDetail/Description/TabTitle/Content" error:nil];
+            
+            if ([contentArr count] > 0) {
+                
+                for (DDXMLElement *aElement in contentArr) {
+                    NSString *tabTitle = @"Description";
+                    NSString *content = [[aElement stringValue] sqlQueryString];
+                    
+                    NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d,%d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
+                    
+                    [contentSqlQuery appendString:insertSQL];
+                    
+                    contentRecordID++;
+                    
+                    
+                }
+            }
+            else
+            {
+                
+                for (DDXMLElement *aElement in descTabsArr) {
+                    NSString *tabTitle = [aElement stringValue];
+                    NSString *content = [[[(DDXMLElement *)[aElement parent] elementForName:@"Content"] stringValue] sqlQueryString];
+                    
+                    NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID,Product_ID, Name, XMLContent) values (%d, %d, '%@','%@');",kContentTabTable,contentRecordID,prodRecordID,tabTitle,content];
+                    
+                    [contentSqlQuery appendString:insertSQL];
+                    
+                    contentRecordID++;
+                    
+
+                }
+                
+            }
 
             
-            NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Brand_ID, Name, Label, IsFeatured, ProductType, SPXUrl, RelatedProduct1, RelatedProduct2, RelatedProduct3, RelatedProduct4, RelatedProduct5, RelatedProduct6, RelatedProduct7, RelatedProduct8, RelatedProduct9, RelatedProduct10) values (%d, %d, '%@', '', 'No', 'Filters', '%@', null, null, null, null, null, null, null, null, null, null);",kProductTable,recordID,brandID,prodName,SPXUrl];
+            NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Brand_ID, Name, Label, IsFeatured, ProductType, SPXUrl, RelatedProduct1, RelatedProduct2, RelatedProduct3, RelatedProduct4, RelatedProduct5, RelatedProduct6, RelatedProduct7, RelatedProduct8, RelatedProduct9, RelatedProduct10) values (%d, %d, '%@', '', 'No', 'Filters', '%@', null, null, null, null, null, null, null, null, null, null);",kProductTable,prodRecordID,brandID,prodName,SPXUrl];
             
-            [sqlQuery appendString:insertSQL];
+            [prodSqlQuery appendString:insertSQL];
             
-            recordID++;
+            prodRecordID++;
             
 
             
@@ -303,9 +321,11 @@
         
     }
     
-    [_sharedDB executeBatch:sqlQuery error:&error];
+    [_sharedDB executeBatch:prodSqlQuery error:&error];
+    [_sharedDB executeBatch:contentSqlQuery error:&error];
     
-    [sqlQuery release];
+    [prodSqlQuery release];
+    [contentSqlQuery release];
     
     
     

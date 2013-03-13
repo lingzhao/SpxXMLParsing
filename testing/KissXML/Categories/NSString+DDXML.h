@@ -13,4 +13,6 @@
 
 - (NSString *)trimLRSpaces;
 
+- (NSString *)sqlQueryString;
+
 @end
