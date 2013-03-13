@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		526639E916EED1790067342F /* FMDatabase+InMemoryOnDiskIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639DD16EED1790067342F /* FMDatabase+InMemoryOnDiskIO.m */; };
+		526639EA16EED1790067342F /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639DF16EED1790067342F /* FMDatabase.m */; };
+		526639EB16EED1790067342F /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639E116EED1790067342F /* FMDatabaseAdditions.m */; };
+		526639EC16EED1790067342F /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639E316EED1790067342F /* FMDatabasePool.m */; };
+		526639ED16EED1790067342F /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639E516EED1790067342F /* FMDatabaseQueue.m */; };
+		526639EF16EED1790067342F /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 526639E816EED1790067342F /* FMResultSet.m */; };
+		526639FB16EED6300067342F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 526639FA16EED6300067342F /* libsqlite3.dylib */; };
+		52663A1D16F016F30067342F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52663A1C16F016F30067342F /* QuartzCore.framework */; };
+		52663A3F16F045690067342F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 52663A3E16F045690067342F /* MBProgressHUD.m */; };
+		52663A4316F04BFC0067342F /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 52663A4116F04BFC0067342F /* 37x-Checkmark.png */; };
+		52663A4416F04BFC0067342F /* 37x-Checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52663A4216F04BFC0067342F /* 37x-Checkmark@2x.png */; };
 		52BD9A8716ED7B30001090F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BD9A8616ED7B30001090F4 /* UIKit.framework */; };
 		52BD9A8916ED7B30001090F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BD9A8816ED7B30001090F4 /* Foundation.framework */; };
 		52BD9A8B16ED7B30001090F4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BD9A8A16ED7B30001090F4 /* CoreGraphics.framework */; };
@@ -18,9 +29,33 @@
 		52BD9A9D16ED7B35001090F4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52BD9A9C16ED7B35001090F4 /* Default-568h@2x.png */; };
 		52BD9AA016ED7B35001090F4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9A9F16ED7B35001090F4 /* ViewController.m */; };
 		52BD9AA316ED7B36001090F4 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52BD9AA116ED7B36001090F4 /* ViewController.xib */; };
+		52BD9AD116ED86BC001090F4 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BD9AD016ED86BC001090F4 /* libxml2.dylib */; };
+		52BD9AE216ED8924001090F4 /* DDXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9AD516ED8924001090F4 /* DDXMLElementAdditions.m */; };
+		52BD9AE316ED8924001090F4 /* NSString+DDXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9AD816ED8924001090F4 /* NSString+DDXML.m */; };
+		52BD9AE416ED8924001090F4 /* DDXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9ADB16ED8924001090F4 /* DDXMLDocument.m */; };
+		52BD9AE516ED8924001090F4 /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9ADD16ED8924001090F4 /* DDXMLElement.m */; };
+		52BD9AE616ED8924001090F4 /* DDXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BD9ADF16ED8924001090F4 /* DDXMLNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		526639DC16EED1790067342F /* FMDatabase+InMemoryOnDiskIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+InMemoryOnDiskIO.h"; sourceTree = "<group>"; };
+		526639DD16EED1790067342F /* FMDatabase+InMemoryOnDiskIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FMDatabase+InMemoryOnDiskIO.m"; sourceTree = "<group>"; };
+		526639DE16EED1790067342F /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		526639DF16EED1790067342F /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		526639E016EED1790067342F /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		526639E116EED1790067342F /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		526639E216EED1790067342F /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		526639E316EED1790067342F /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		526639E416EED1790067342F /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		526639E516EED1790067342F /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		526639E716EED1790067342F /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		526639E816EED1790067342F /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		526639FA16EED6300067342F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		52663A1C16F016F30067342F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		52663A3D16F045690067342F /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		52663A3E16F045690067342F /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		52663A4116F04BFC0067342F /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark.png"; sourceTree = "<group>"; };
+		52663A4216F04BFC0067342F /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark@2x.png"; sourceTree = "<group>"; };
 		52BD9A8216ED7B2F001090F4 /* testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52BD9A8616ED7B30001090F4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		52BD9A8816ED7B30001090F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -37,6 +72,19 @@
 		52BD9A9E16ED7B35001090F4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		52BD9A9F16ED7B35001090F4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		52BD9AA216ED7B36001090F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		52BD9AD016ED86BC001090F4 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		52BD9AD416ED8924001090F4 /* DDXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLElementAdditions.h; sourceTree = "<group>"; };
+		52BD9AD516ED8924001090F4 /* DDXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLElementAdditions.m; sourceTree = "<group>"; };
+		52BD9AD716ED8924001090F4 /* NSString+DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDXML.h"; sourceTree = "<group>"; };
+		52BD9AD816ED8924001090F4 /* NSString+DDXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDXML.m"; sourceTree = "<group>"; };
+		52BD9AD916ED8924001090F4 /* DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXML.h; sourceTree = "<group>"; };
+		52BD9ADA16ED8924001090F4 /* DDXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLDocument.h; sourceTree = "<group>"; };
+		52BD9ADB16ED8924001090F4 /* DDXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLDocument.m; sourceTree = "<group>"; };
+		52BD9ADC16ED8924001090F4 /* DDXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLElement.h; sourceTree = "<group>"; };
+		52BD9ADD16ED8924001090F4 /* DDXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLElement.m; sourceTree = "<group>"; };
+		52BD9ADE16ED8924001090F4 /* DDXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLNode.h; sourceTree = "<group>"; };
+		52BD9ADF16ED8924001090F4 /* DDXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLNode.m; sourceTree = "<group>"; };
+		52BD9AE116ED8924001090F4 /* DDXMLPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLPrivate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +92,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52663A1D16F016F30067342F /* QuartzCore.framework in Frameworks */,
+				526639FB16EED6300067342F /* libsqlite3.dylib in Frameworks */,
+				52BD9AD116ED86BC001090F4 /* libxml2.dylib in Frameworks */,
 				52BD9A8716ED7B30001090F4 /* UIKit.framework in Frameworks */,
 				52BD9A8916ED7B30001090F4 /* Foundation.framework in Frameworks */,
 				52BD9A8B16ED7B30001090F4 /* CoreGraphics.framework in Frameworks */,
@@ -53,6 +104,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		526639DB16EED1790067342F /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				526639DC16EED1790067342F /* FMDatabase+InMemoryOnDiskIO.h */,
+				526639DD16EED1790067342F /* FMDatabase+InMemoryOnDiskIO.m */,
+				526639DE16EED1790067342F /* FMDatabase.h */,
+				526639DF16EED1790067342F /* FMDatabase.m */,
+				526639E016EED1790067342F /* FMDatabaseAdditions.h */,
+				526639E116EED1790067342F /* FMDatabaseAdditions.m */,
+				526639E216EED1790067342F /* FMDatabasePool.h */,
+				526639E316EED1790067342F /* FMDatabasePool.m */,
+				526639E416EED1790067342F /* FMDatabaseQueue.h */,
+				526639E516EED1790067342F /* FMDatabaseQueue.m */,
+				526639E716EED1790067342F /* FMResultSet.h */,
+				526639E816EED1790067342F /* FMResultSet.m */,
+			);
+			path = FMDB;
+			sourceTree = "<group>";
+		};
+		52663A3C16F045680067342F /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				52663A3D16F045690067342F /* MBProgressHUD.h */,
+				52663A3E16F045690067342F /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		52663A4016F04BF10067342F /* images */ = {
+			isa = PBXGroup;
+			children = (
+				52BD9A9816ED7B34001090F4 /* Default.png */,
+				52BD9A9A16ED7B34001090F4 /* Default@2x.png */,
+				52BD9A9C16ED7B35001090F4 /* Default-568h@2x.png */,
+				52663A4116F04BFC0067342F /* 37x-Checkmark.png */,
+				52663A4216F04BFC0067342F /* 37x-Checkmark@2x.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		52BD9A7716ED7B2C001090F4 = {
 			isa = PBXGroup;
 			children = (
@@ -73,6 +164,9 @@
 		52BD9A8516ED7B30001090F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52663A1C16F016F30067342F /* QuartzCore.framework */,
+				526639FA16EED6300067342F /* libsqlite3.dylib */,
+				52BD9AD016ED86BC001090F4 /* libxml2.dylib */,
 				52BD9A8616ED7B30001090F4 /* UIKit.framework */,
 				52BD9A8816ED7B30001090F4 /* Foundation.framework */,
 				52BD9A8A16ED7B30001090F4 /* CoreGraphics.framework */,
@@ -83,6 +177,9 @@
 		52BD9A8C16ED7B32001090F4 /* testing */ = {
 			isa = PBXGroup;
 			children = (
+				52663A3C16F045680067342F /* MBProgressHUD */,
+				526639DB16EED1790067342F /* FMDB */,
+				52BD9AD216ED8924001090F4 /* KissXML */,
 				52BD9A9516ED7B34001090F4 /* AppDelegate.h */,
 				52BD9A9616ED7B34001090F4 /* AppDelegate.m */,
 				52BD9A9E16ED7B35001090F4 /* ViewController.h */,
@@ -96,15 +193,56 @@
 		52BD9A8D16ED7B33001090F4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				52663A4016F04BF10067342F /* images */,
 				52BD9A8E16ED7B33001090F4 /* testing-Info.plist */,
 				52BD9A8F16ED7B33001090F4 /* InfoPlist.strings */,
 				52BD9A9216ED7B33001090F4 /* main.m */,
 				52BD9A9416ED7B34001090F4 /* testing-Prefix.pch */,
-				52BD9A9816ED7B34001090F4 /* Default.png */,
-				52BD9A9A16ED7B34001090F4 /* Default@2x.png */,
-				52BD9A9C16ED7B35001090F4 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		52BD9AD216ED8924001090F4 /* KissXML */ = {
+			isa = PBXGroup;
+			children = (
+				52BD9AD316ED8924001090F4 /* Additions */,
+				52BD9AD616ED8924001090F4 /* Categories */,
+				52BD9AD916ED8924001090F4 /* DDXML.h */,
+				52BD9ADA16ED8924001090F4 /* DDXMLDocument.h */,
+				52BD9ADB16ED8924001090F4 /* DDXMLDocument.m */,
+				52BD9ADC16ED8924001090F4 /* DDXMLElement.h */,
+				52BD9ADD16ED8924001090F4 /* DDXMLElement.m */,
+				52BD9ADE16ED8924001090F4 /* DDXMLNode.h */,
+				52BD9ADF16ED8924001090F4 /* DDXMLNode.m */,
+				52BD9AE016ED8924001090F4 /* Private */,
+			);
+			path = KissXML;
+			sourceTree = "<group>";
+		};
+		52BD9AD316ED8924001090F4 /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				52BD9AD416ED8924001090F4 /* DDXMLElementAdditions.h */,
+				52BD9AD516ED8924001090F4 /* DDXMLElementAdditions.m */,
+			);
+			path = Additions;
+			sourceTree = "<group>";
+		};
+		52BD9AD616ED8924001090F4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				52BD9AD716ED8924001090F4 /* NSString+DDXML.h */,
+				52BD9AD816ED8924001090F4 /* NSString+DDXML.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		52BD9AE016ED8924001090F4 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				52BD9AE116ED8924001090F4 /* DDXMLPrivate.h */,
+			);
+			path = Private;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +301,8 @@
 				52BD9A9B16ED7B34001090F4 /* Default@2x.png in Resources */,
 				52BD9A9D16ED7B35001090F4 /* Default-568h@2x.png in Resources */,
 				52BD9AA316ED7B36001090F4 /* ViewController.xib in Resources */,
+				52663A4316F04BFC0067342F /* 37x-Checkmark.png in Resources */,
+				52663A4416F04BFC0067342F /* 37x-Checkmark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +316,18 @@
 				52BD9A9316ED7B33001090F4 /* main.m in Sources */,
 				52BD9A9716ED7B34001090F4 /* AppDelegate.m in Sources */,
 				52BD9AA016ED7B35001090F4 /* ViewController.m in Sources */,
+				52BD9AE216ED8924001090F4 /* DDXMLElementAdditions.m in Sources */,
+				52BD9AE316ED8924001090F4 /* NSString+DDXML.m in Sources */,
+				52BD9AE416ED8924001090F4 /* DDXMLDocument.m in Sources */,
+				52BD9AE516ED8924001090F4 /* DDXMLElement.m in Sources */,
+				52BD9AE616ED8924001090F4 /* DDXMLNode.m in Sources */,
+				526639E916EED1790067342F /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
+				526639EA16EED1790067342F /* FMDatabase.m in Sources */,
+				526639EB16EED1790067342F /* FMDatabaseAdditions.m in Sources */,
+				526639EC16EED1790067342F /* FMDatabasePool.m in Sources */,
+				526639ED16EED1790067342F /* FMDatabaseQueue.m in Sources */,
+				526639EF16EED1790067342F /* FMResultSet.m in Sources */,
+				52663A3F16F045690067342F /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +374,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 			};
@@ -241,6 +394,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -289,6 +443,7 @@
 				52BD9AA816ED7B36001090F4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

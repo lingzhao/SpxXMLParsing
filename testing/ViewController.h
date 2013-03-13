@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FMDatabase.h"
+#import "MBProgressHUD.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<MBProgressHUDDelegate>
+{
+    BOOL _bIsParsingFinished;
+    MBProgressHUD *HUD;  
+}
+
+
+@property (retain, nonatomic) IBOutlet UITextView *xmlTextView;
+@property (nonatomic,retain)  FMDatabase *sharedDB;
+- (IBAction)parseXML:(id)sender;
 
 @end

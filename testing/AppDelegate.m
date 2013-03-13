@@ -10,10 +10,15 @@
 
 #import "ViewController.h"
 
+
+
+
+
 @implementation AppDelegate
 
 - (void)dealloc
 {
+   
     [_window release];
     [_viewController release];
     [super dealloc];
@@ -21,6 +26,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+
+    
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
@@ -55,5 +64,16 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+
+#pragma mark  -- initiate application
+
+- (void)initDB:(NSString *)dbPath
+{    
+    
+
+}
+
 
 @end
