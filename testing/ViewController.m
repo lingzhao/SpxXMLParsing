@@ -212,6 +212,7 @@
     
     NSMutableString *prodSqlQuery = [[NSMutableString alloc] initWithString:@""];
     NSMutableString *contentSqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *fileSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
     HUD.labelText = @"Initiating";
     
@@ -327,10 +328,31 @@
             /*********  Parsing ContentTab END ************/
             
             
+            /*********  Parsing Assets BEGIN ************/
 
             
-
+            NSArray * jpgAssets = [xmlDoc nodesForXPath:@"//Asset[@type='image']" error:nil];
+            NSArray * pdfFiles = [xmlDoc nodesForXPath:@"//Asset[@filetype='pdf']" error:nil];
             
+            for (NSUInteger i = 0; i < [jpgAssets count]; i++) {
+                
+                DDXMLElement *aElement = [jpgAssets objectAtIndex:i];
+                NSString *name = [[aElement elementForName:@"Title"] stringValue];
+                
+                NSString *smallImgFileName = [[[aElement elementForName:@"Thumbnail"] attributeForName:@"src"] stringValue];
+                
+                NSString *midImgFileName = [[[aElement elementForName:@"LargeImage"] attributeForName:@"src"] stringValue];
+                
+                NSString *largeImgFileName = [[[aElement elementForName:@"FullImage"] attributeForName:@"src"] stringValue];
+                
+            }
+            
+            
+            for (DDXMLElement *aElement in pdfFiles) {
+                
+            }
+            
+            /*********  Parsing Assets END ************/
 
             
         }
@@ -341,9 +363,11 @@
     
     [_sharedDB executeBatch:prodSqlQuery error:&error];
     [_sharedDB executeBatch:contentSqlQuery error:&error];
+    [_sharedDB executeBatch:fileSqlQuery error:&error];
     
     [prodSqlQuery release];
     [contentSqlQuery release];
+    [fileSqlQuery release];
     
     
     
