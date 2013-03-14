@@ -36,6 +36,24 @@
 {
     self = [self stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     return self;
+    
+     
+}
+
+
+- (NSString *)rightSubString:(NSString *)aString
+{
+    
+    NSRange range = [self rangeOfString:aString];
+    
+    if (range.length!=0) {
+        return [self substringFromIndex:(range.location + range.length)];
+    }
+    else
+    {
+        return self;
+    }
+    
 }
 
 @end

@@ -120,7 +120,8 @@
 	[self.view addSubview:HUD];
 	
 	// Set determinate mode
-	HUD.mode = MBProgressHUDModeDeterminate;
+	HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Starting";
     
     HUD.dimBackground = YES;
 	
@@ -214,6 +215,8 @@
     NSMutableString *contentSqlQuery = [[NSMutableString alloc] initWithString:@""];
     NSMutableString *fileSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
+    
+    HUD.mode = MBProgressHUDModeDeterminate;
     HUD.labelText = @"Initiating";
     
     
@@ -339,16 +342,68 @@
                 DDXMLElement *aElement = [jpgAssets objectAtIndex:i];
                 NSString *name = [[aElement elementForName:@"Title"] stringValue];
                 
-                NSString *smallImgFileName = [[[aElement elementForName:@"Thumbnail"] attributeForName:@"src"] stringValue];
+                NSString *smallImgFileName = [[[[aElement elementForName:@"Thumbnail"] attributeForName:@"src"] stringValue] rightSubString:@"/en/images/"];
                 
-                NSString *midImgFileName = [[[aElement elementForName:@"LargeImage"] attributeForName:@"src"] stringValue];
                 
-                NSString *largeImgFileName = [[[aElement elementForName:@"FullImage"] attributeForName:@"src"] stringValue];
+                NSString *midImgFileName = [[[[aElement elementForName:@"LargeImage"] attributeForName:@"src"] stringValue] rightSubString:@"/en/images/"];
+                
+                NSString *largeImgFileName = [[[[aElement elementForName:@"FullImage"] attributeForName:@"src"] stringValue] rightSubString:@"/en/images/"];
+                
+                
+                NSString *insertSQL;
+                
+                if (i == 0) {
+                    insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Type, Sub_Type, Entity_Type, Entity_ID, Sequence, FileName, Url) values (%d, '%@', 'JPG', 'DEFAULT', 'P', '%d', '%d', '%@', '');",kFileTable,fileRecordID,name,prodRecordID,i+1,midImgFileName];
+                    
+                    [fileSqlQuery appendString:insertSQL];
+                    
+                    fileRecordID++;
+                }
+                
+                
+
+                insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Type, Sub_Type, Entity_Type, Entity_ID, Sequence, FileName, Url) values (%d, '%@', 'JPG', 'SMALL', 'P', '%d', '%d', '%@', '');",kFileTable,fileRecordID,name,prodRecordID,i+1,smallImgFileName];
+                
+                [fileSqlQuery appendString:insertSQL];
+                
+                fileRecordID++;
+                
+                
+                insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Type, Sub_Type, Entity_Type, Entity_ID, Sequence, FileName, Url) values (%d, '%@', 'JPG', 'SMALL', 'P', '%d', '%d', '%@', '');",kFileTable,fileRecordID,name,prodRecordID,i+1,midImgFileName];
+                
+                [fileSqlQuery appendString:insertSQL];
+                
+                fileRecordID++;
+                
+                
+                insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Type, Sub_Type, Entity_Type, Entity_ID, Sequence, FileName, Url) values (%d, '%@', 'JPG', 'MID', 'P', '%d', '%d', '%@', '');",kFileTable,fileRecordID,name,prodRecordID,i+1,largeImgFileName];
+                
+                [fileSqlQuery appendString:insertSQL];
+                
+                fileRecordID++;
+                
                 
             }
             
             
-            for (DDXMLElement *aElement in pdfFiles) {
+            for (NSUInteger i = 0; i < [pdfFiles count]; i++) {
+                
+                DDXMLElement *aElement = [pdfFiles objectAtIndex:i];
+                
+                NSString *name = [[aElement elementForName:@"a"] stringValue];
+                
+                NSString *pdfURL = [[[aElement elementForName:@"a"] attributeForName:@"href"] stringValue];
+                
+                NSString *subType = [[aElement attributeForName:@"type"] stringValue];
+                
+                
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Type, Sub_Type, Entity_Type, Entity_ID, Sequence, FileName, Url) values (%d, '%@', 'PDF', '%@', 'P', '%d', '%d', '', '%@');",kFileTable,fileRecordID,name,subType,prodRecordID,i+1,pdfURL];
+                
+                [fileSqlQuery appendString:insertSQL];
+                
+                fileRecordID++;
+
                 
             }
             
@@ -359,7 +414,11 @@
         
  
         
-    }
+    } 
+    
+    
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Commiting";
     
     [_sharedDB executeBatch:prodSqlQuery error:&error];
     [_sharedDB executeBatch:contentSqlQuery error:&error];
@@ -385,8 +444,9 @@
     
     NSUInteger recordID = 1;
     
-    
-   HUD.labelText = @"Updating";
+
+    HUD.mode = MBProgressHUDModeDeterminate;
+    HUD.labelText = @"Updating";
     
     
     

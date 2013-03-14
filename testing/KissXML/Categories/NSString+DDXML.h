@@ -15,4 +15,6 @@
 
 - (NSString *)sqlQueryString;
 
+- (NSString *)rightSubString:(NSString *)aString;
+
 @end
