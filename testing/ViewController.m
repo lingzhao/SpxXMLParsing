@@ -216,7 +216,7 @@
     NSMutableString *fileSqlQuery = [[NSMutableString alloc] initWithString:@""];
     
     
-    HUD.mode = MBProgressHUDModeDeterminate;
+    HUD.mode = MBProgressHUDModeAnnularDeterminate;
     HUD.labelText = @"Initiating";
     
     
