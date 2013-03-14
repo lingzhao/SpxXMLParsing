@@ -155,6 +155,8 @@
     [self initProductDB];
     
     [self updateRelatedProdID];
+    
+    [self initCategoryDB];
 }
 
 
@@ -269,11 +271,12 @@
             
             NSString *prodName = [[[rootElement elementForName:@"DisplayName"] stringValue] trimLRSpaces];
             NSString *brandTxt = [[[rootElement elementForName:@"Brand"] stringValue] trimLRSpaces];
-            NSString *prodTitle = [NSString stringWithFormat:@"pd-%@",[[[rootElement elementForName:@"Title"] stringValue] trimLRSpaces]];
+            NSString *prodLabel = [[[rootElement elementForName:@"Title"] stringValue] trimLRSpaces];
+            NSString *prodTitle = [NSString stringWithFormat:@"pd-%@",prodLabel];
             
             NSString *SPXUrl = [NSString stringWithFormat:@"/en/%@/%@/",brandTxt,prodTitle];
             
-            NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Brand_ID, Name, Label, IsFeatured, ProductType, SPXUrl, RelatedProduct1, RelatedProduct2, RelatedProduct3, RelatedProduct4, RelatedProduct5, RelatedProduct6, RelatedProduct7, RelatedProduct8, RelatedProduct9, RelatedProduct10) values (%d, %d, '%@', '', 'No', 'Filters', '%@', null, null, null, null, null, null, null, null, null, null);",kProductTable,prodRecordID,brandID,prodName,SPXUrl];
+            NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Brand_ID, Name, Label, IsFeatured, ProductType, SPXUrl, RelatedProduct1, RelatedProduct2, RelatedProduct3, RelatedProduct4, RelatedProduct5, RelatedProduct6, RelatedProduct7, RelatedProduct8, RelatedProduct9, RelatedProduct10) values (%d, %d, '%@', '%@', 'No', 'Filters', '%@', null, null, null, null, null, null, null, null, null, null);",kProductTable,prodRecordID,brandID,prodName,prodLabel,SPXUrl];
             
             [prodSqlQuery appendString:insertSQL];
             
@@ -553,6 +556,356 @@
     
     
     
+    
+    
+}
+
+
+
+- (void)initCategoryDB
+{
+    
+    NSError *error = nil;
+    
+    
+    
+    NSUInteger categoryRecordID = 1;
+    NSUInteger subCategoryRecordID = 1;
+    
+    NSMutableString *categorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *subCategorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    
+    NSMutableArray *categoryArr = [[NSMutableArray alloc] init];
+    NSMutableArray *subCategoryArr = [[NSMutableArray alloc] init];
+
+    
+    
+    HUD.mode = MBProgressHUDModeAnnularDeterminate;
+    HUD.labelText = @"Category Initialize";
+    
+    
+    
+    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kCategoryMapXMLPath];
+    
+
+        
+    for (NSUInteger i = 0; i < [xmlListArr count]; i++) {
+        
+        HUD.progress = (1.0f/[xmlListArr count] * (i+1));
+        
+        NSString *xmlFilePath = [xmlListArr objectAtIndex:i];
+        
+        
+        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
+        
+        NSArray * productSummaryArr = [xmlDoc nodesForXPath:@"//ProductSummary" error:&error];
+        
+        
+        
+        
+        /*********  Parsing Category BEGIN ************/
+        
+
+        for (NSUInteger i = 0; i < [productSummaryArr count]; i++) {
+            DDXMLElement *aElement = [productSummaryArr objectAtIndex:i];
+            NSString *categoryName = [[aElement elementForName:@"Category"] stringValue];
+            
+            if (categoryName == nil) {
+                categoryName = [[aElement elementForName:@"Type"] stringValue];
+            }
+            NSString *subCategoryName = [[aElement elementForName:@"SubCategory"] stringValue];
+            
+            if (categoryName && ![categoryArr containsObject:categoryName]) {
+                [categoryArr addObject:categoryName];
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kCategoryTable,categoryRecordID,categoryName];
+                
+                [categorySqlQuery appendString:insertSQL];
+                
+                categoryRecordID++;
+            }
+            
+            
+            if (subCategoryName && ![subCategoryArr containsObject:subCategoryName]) {
+                [subCategoryArr addObject:subCategoryName];
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kSubCategoryTable,subCategoryRecordID,subCategoryName];
+                
+                [subCategorySqlQuery appendString:insertSQL];
+                
+                subCategoryRecordID++;
+            }
+            
+
+            
+        }
+        
+        
+        /*********  Parsing Category END ************/
+        
+
+        
+    }
+    
+
+    
+    
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Commiting";
+    
+    [_sharedDB executeBatch:categorySqlQuery error:&error];
+    [_sharedDB executeBatch:subCategorySqlQuery error:&error];
+
+    
+    [categorySqlQuery release];
+    [subCategorySqlQuery release];
+
+    [categoryArr release];
+    [subCategoryArr release];
+    
+    
+}
+
+
+- (void)UpdateCategoryProductRelation
+{
+    
+    NSError *error = nil;
+    
+    
+    
+    NSUInteger categoryRecordID = 1;
+    NSUInteger subCategoryRecordID = 1;
+    
+    NSMutableString *categorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *subCategorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    
+
+    
+    
+    
+    HUD.mode = MBProgressHUDModeAnnularDeterminate;
+    HUD.labelText = @"Build Category Relation";
+    
+    
+    
+    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kCategoryMapXMLPath];
+    
+    
+    
+    for (NSUInteger i = 0; i < [xmlListArr count]; i++) {
+        
+        HUD.progress = (1.0f/[xmlListArr count] * (i+1));
+        
+        NSString *xmlFilePath = [xmlListArr objectAtIndex:i];
+        
+        
+        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
+        
+        NSArray * productSummaryArr = [xmlDoc nodesForXPath:@"//ProductSummary" error:&error];
+        
+        
+        
+        
+        /*********  Parsing Category BEGIN ************/
+        
+        
+        for (NSUInteger i = 0; i < [productSummaryArr count]; i++) {
+            DDXMLElement *aElement = [productSummaryArr objectAtIndex:i];
+            NSString *categoryName = [[aElement elementForName:@"Category"] stringValue];
+            
+            if (categoryName == nil) {
+                categoryName = [[aElement elementForName:@"Type"] stringValue];
+            }
+            NSString *subCategoryName = [[aElement elementForName:@"SubCategory"] stringValue];
+            
+            NSString *prodTitle = [[aElement elementForName:@"Title"] stringValue];
+            
+            
+            if (prodTitle == nil) {
+                continue;
+            }
+            
+            
+            FMResultSet *rs = [_sharedDB executeQuery:[NSString stringWithFormat:@"select ID from %@ where Label = '%@'",kProductTable,prodTitle]];
+            
+            
+            NSUInteger productID = 0;
+            
+            if ([rs next]) {
+                productID = [rs intForColumnIndex:0];
+            }
+            
+            
+            if (categoryName && productID > 0) {
+
+                
+                rs = [_sharedDB executeQuery:[NSString stringWithFormat:@"select ID from %@ where Name = '%@'",kCategoryTable,categoryName]];
+                
+                
+                NSUInteger categoryID = 1;
+                
+                if ([rs next]) {
+                    categoryID = [rs intForColumnIndex:0];
+                }
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Category_ID, Product_ID,Label) values (%d, %d, %d, '');",kCategoryProductTable,categoryRecordID,categoryID,productID];
+                
+                [categorySqlQuery appendString:insertSQL];
+                
+                categoryRecordID++;
+            }
+            
+            
+            if (subCategoryName && productID > 0) {
+                
+                
+                rs = [_sharedDB executeQuery:[NSString stringWithFormat:@"select ID from %@ where Name = '%@'",kSubCategoryTable,subCategoryName]];
+                
+                
+                NSUInteger subCategoryID = 1;
+                
+                if ([rs next]) {
+                    subCategoryID = [rs intForColumnIndex:0];
+                }
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Category_ID, Product_ID,Label) values (%d, %d, %d, '');",kSubCategoryProductTable,subCategoryRecordID,subCategoryID,productID];
+                
+                [subCategorySqlQuery appendString:insertSQL];
+                
+                categoryRecordID++;
+            }
+            
+            
+            
+        }
+        
+        
+        /*********  Parsing Category END ************/
+        
+        
+        
+    }
+    
+    
+    
+    
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Commiting";
+    
+    [_sharedDB executeBatch:categorySqlQuery error:&error];
+    [_sharedDB executeBatch:subCategorySqlQuery error:&error];
+    
+    
+    [categorySqlQuery release];
+    [subCategorySqlQuery release];
+    
+
+    
+    
+}
+
+
+- (void)initIndustryDB
+{
+    
+    NSError *error = nil;
+    
+    
+    
+    NSUInteger industryRecordID = 1;
+
+    
+    NSMutableString *categorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *subCategorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    
+    NSMutableArray *categoryArr = [[NSMutableArray alloc] init];
+    NSMutableArray *subCategoryArr = [[NSMutableArray alloc] init];
+    
+    
+    
+    HUD.mode = MBProgressHUDModeAnnularDeterminate;
+    HUD.labelText = @"Category Initialize";
+    
+    
+    
+    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kCategoryMapXMLPath];
+    
+    
+    
+    for (NSUInteger i = 0; i < [xmlListArr count]; i++) {
+        
+        HUD.progress = (1.0f/[xmlListArr count] * (i+1));
+        
+        NSString *xmlFilePath = [xmlListArr objectAtIndex:i];
+        
+        
+        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
+        
+        NSArray * productSummaryArr = [xmlDoc nodesForXPath:@"//ProductSummary" error:&error];
+        
+        
+        
+        
+        /*********  Parsing Category BEGIN ************/
+        
+        
+        for (NSUInteger i = 0; i < [productSummaryArr count]; i++) {
+            DDXMLElement *aElement = [productSummaryArr objectAtIndex:i];
+            NSString *categoryName = [[aElement elementForName:@"Category"] stringValue];
+            
+            if (categoryName == nil) {
+                categoryName = [[aElement elementForName:@"Type"] stringValue];
+            }
+            NSString *subCategoryName = [[aElement elementForName:@"SubCategory"] stringValue];
+            
+            if (categoryName && ![categoryArr containsObject:categoryName]) {
+                [categoryArr addObject:categoryName];
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kCategoryTable,categoryRecordID,categoryName];
+                
+                [categorySqlQuery appendString:insertSQL];
+                
+                categoryRecordID++;
+            }
+            
+            
+            if (subCategoryName && ![subCategoryArr containsObject:subCategoryName]) {
+                [subCategoryArr addObject:subCategoryName];
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kSubCategoryTable,subCategoryRecordID,subCategoryName];
+                
+                [subCategorySqlQuery appendString:insertSQL];
+                
+                subCategoryRecordID++;
+            }
+            
+            
+            
+        }
+        
+        
+        /*********  Parsing Category END ************/
+        
+        
+        
+    }
+    
+    
+    
+    
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Commiting";
+    
+    [_sharedDB executeBatch:categorySqlQuery error:&error];
+    [_sharedDB executeBatch:subCategorySqlQuery error:&error];
+    
+    
+    [categorySqlQuery release];
+    [subCategorySqlQuery release];
+    
+    [categoryArr release];
+    [subCategoryArr release];
     
     
 }
