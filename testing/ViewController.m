@@ -157,6 +157,12 @@
     [self updateRelatedProdID];
     
     [self initCategoryDB];
+    
+    [self UpdateCategoryProductRelation];
+    
+    [self initIndustryDB];
+    
+    [self updateIndustryProductRelation];
 }
 
 
@@ -769,11 +775,11 @@
                     subCategoryID = [rs intForColumnIndex:0];
                 }
                 
-                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Category_ID, Product_ID,Label) values (%d, %d, %d, '');",kSubCategoryProductTable,subCategoryRecordID,subCategoryID,productID];
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, SubCategory_ID, Product_ID,Label) values (%d, %d, %d, '');",kSubCategoryProductTable,subCategoryRecordID,subCategoryID,productID];
                 
                 [subCategorySqlQuery appendString:insertSQL];
                 
-                categoryRecordID++;
+                subCategoryRecordID++;
             }
             
             
@@ -816,20 +822,20 @@
     NSUInteger industryRecordID = 1;
 
     
-    NSMutableString *categorySqlQuery = [[NSMutableString alloc] initWithString:@""];
-    NSMutableString *subCategorySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    NSMutableString *industrySqlQuery = [[NSMutableString alloc] initWithString:@""];
+
     
-    NSMutableArray *categoryArr = [[NSMutableArray alloc] init];
-    NSMutableArray *subCategoryArr = [[NSMutableArray alloc] init];
+    NSMutableArray *industryArr = [[NSMutableArray alloc] init];
+
     
     
     
     HUD.mode = MBProgressHUDModeAnnularDeterminate;
-    HUD.labelText = @"Category Initialize";
+    HUD.labelText = @"Industry Initialize";
     
     
     
-    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kCategoryMapXMLPath];
+    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kindustryMapXMLPath];
     
     
     
@@ -842,7 +848,7 @@
         
         DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
         
-        NSArray * productSummaryArr = [xmlDoc nodesForXPath:@"//ProductSummary" error:&error];
+        NSArray * industrySummaryArr = [xmlDoc nodesForXPath:@"//Product/Industries/Industry" error:&error];
         
         
         
@@ -850,36 +856,23 @@
         /*********  Parsing Category BEGIN ************/
         
         
-        for (NSUInteger i = 0; i < [productSummaryArr count]; i++) {
-            DDXMLElement *aElement = [productSummaryArr objectAtIndex:i];
-            NSString *categoryName = [[aElement elementForName:@"Category"] stringValue];
+        for (NSUInteger i = 0; i < [industrySummaryArr count]; i++) {
+            DDXMLElement *aElement = [industrySummaryArr objectAtIndex:i];
+            NSString *industryName = [aElement stringValue];
             
-            if (categoryName == nil) {
-                categoryName = [[aElement elementForName:@"Type"] stringValue];
-            }
-            NSString *subCategoryName = [[aElement elementForName:@"SubCategory"] stringValue];
+ 
             
-            if (categoryName && ![categoryArr containsObject:categoryName]) {
-                [categoryArr addObject:categoryName];
+            if (industryName && ![industryArr containsObject:industryName]) {
+                [industryArr addObject:industryName];
                 
-                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kCategoryTable,categoryRecordID,categoryName];
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kIndustryTable,industryRecordID,industryName];
                 
-                [categorySqlQuery appendString:insertSQL];
+                [industrySqlQuery appendString:insertSQL];
                 
-                categoryRecordID++;
+                industryRecordID++;
             }
             
-            
-            if (subCategoryName && ![subCategoryArr containsObject:subCategoryName]) {
-                [subCategoryArr addObject:subCategoryName];
-                
-                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Name, Label) values (%d, '%@', '');",kSubCategoryTable,subCategoryRecordID,subCategoryName];
-                
-                [subCategorySqlQuery appendString:insertSQL];
-                
-                subCategoryRecordID++;
-            }
-            
+                         
             
             
         }
@@ -897,15 +890,124 @@
     HUD.mode = MBProgressHUDModeIndeterminate;
     HUD.labelText = @"Commiting";
     
-    [_sharedDB executeBatch:categorySqlQuery error:&error];
-    [_sharedDB executeBatch:subCategorySqlQuery error:&error];
+    [_sharedDB executeBatch:industrySqlQuery error:&error];
+
     
     
-    [categorySqlQuery release];
-    [subCategorySqlQuery release];
+    [industrySqlQuery release];
+    [industryArr release];
+
     
-    [categoryArr release];
-    [subCategoryArr release];
+    
+}
+
+
+
+- (void)updateIndustryProductRelation
+{
+    
+    NSError *error = nil;
+    
+    
+    
+    NSUInteger industryRecordID = 1;
+    
+    
+    NSMutableString *industrySqlQuery = [[NSMutableString alloc] initWithString:@""];
+    
+    
+    
+    
+    HUD.mode = MBProgressHUDModeAnnularDeterminate;
+    HUD.labelText = @"Industry Update";
+    
+    
+    
+    NSArray *xmlListArr = [self recursivePathsForResourcesOfType:@"XML" inDirectory:kindustryMapXMLPath];
+    
+    
+    
+    for (NSUInteger i = 0; i < [xmlListArr count]; i++) {
+        
+        HUD.progress = (1.0f/[xmlListArr count] * (i+1));
+        
+        NSString *xmlFilePath = [xmlListArr objectAtIndex:i];
+        
+        
+        DDXMLDocument *xmlDoc = [[DDXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:xmlFilePath] options:0 error:&error];
+        
+        NSArray * industrySummaryArr = [xmlDoc nodesForXPath:@"//Product/Industries/Industry" error:&error];
+        
+        
+        
+        
+        /*********  Parsing industry files BEGIN ************/
+        
+        
+        for (NSUInteger i = 0; i < [industrySummaryArr count]; i++) {
+            DDXMLElement *aElement = [industrySummaryArr objectAtIndex:i];
+            NSString *industryName = [aElement stringValue];
+            NSString *prodTitle = [[(DDXMLElement *)[[aElement parent] parent] elementForName:@"Name"] stringValue];
+            
+            
+            FMResultSet *rs = [_sharedDB executeQuery:[NSString stringWithFormat:@"select ID from %@ where Label = '%@'",kProductTable,prodTitle]];
+            
+            
+            NSUInteger productID = 0;
+            
+            
+            
+            if ([rs next]) {
+                productID = [rs intForColumnIndex:0];
+            }
+            
+            
+            
+            rs = [_sharedDB executeQuery:[NSString stringWithFormat:@"select ID from %@ where Name = '%@'",kIndustryTable,industryName]];
+            
+            
+            NSUInteger industryID = 0;
+            
+            if ([rs next]) {
+                industryID = [rs intForColumnIndex:0];
+            }
+            
+            
+            
+            if (industryID > 0 && productID > 0) {
+                
+                NSString *insertSQL = [NSString stringWithFormat:@"insert into %@ (ID, Industry_ID, Product_ID) values (%d, %d, %d);",kIndustryProductTable,industryRecordID,productID,industryID];
+                
+                [industrySqlQuery appendString:insertSQL];
+                
+                industryRecordID++;
+            }
+            
+            
+            
+            
+        }
+        
+        
+        /*********  Parsing industry files END ************/
+        
+        
+        
+    }
+    
+    
+    
+    
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    HUD.labelText = @"Commiting";
+    
+    [_sharedDB executeBatch:industrySqlQuery error:&error];
+    
+    
+    
+    [industrySqlQuery release];
+
+    
     
     
 }
